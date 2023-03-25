@@ -1,0 +1,35 @@
+<app-dialog-shared [width]="'55vw'" [dialogHeader]='title' (close)="closeDialog()">
+    <div class="bodyDialog">
+            <form [formGroup]="tasksForm" >
+                <div class="grid p-fluid">
+                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                        <app-input-field label="اسم المهمة" formControlName="TaskName"></app-input-field>
+                    </div>
+                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                        <app-select-field formControlName="TaskType" [filter]="true" [label]="'نوع المهمة'" [formControl]="select"   [dropdownItems]="tasks" > </app-select-field>
+                    </div>
+                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                        <app-select-field formControlName="Section" [filter]="false" [label]="'القسم'" [formControl]="select"   [dropdownItems]="sections" > </app-select-field>
+                    </div>
+                    <div class="col-12 mb-2 lg:col-4 lg:mb-0 flex  align-items-center  ">
+                        <label for="">ظهور المهمة للعميل</label>
+                        <p-inputSwitch [ngModel]="true" class="mx-2" ></p-inputSwitch>
+                    </div>
+
+                    <div class="col-12 mb-2 lg:col-12 lg:mb-0 " >
+                            <div class="text-900 text-xl font-semibold mb-2 md:mb-0">
+                                 اضافة مرفقات
+                            </div>
+                        <hr>
+                     <app-file-uploader ></app-file-uploader>
+                    </div>
+                </div>
+            </form>
+    </div>
+    <div class="footerDialog">
+        <app-button-component label="حفظ" [classColor]="'p-button-outlined'"  [pTooltipCustom]="'حفط'"
+            [Icon]="'pi pi-folder-open'"></app-button-component>
+        <app-button-component label="مسح بيانات الحقول" [classColor]="' p-button-secondary'"
+            [pTooltipCustom]="'مسح الحقول '" [Icon]="'pi pi-eraser'"></app-button-component>
+    </div>
+</app-dialog-shared>

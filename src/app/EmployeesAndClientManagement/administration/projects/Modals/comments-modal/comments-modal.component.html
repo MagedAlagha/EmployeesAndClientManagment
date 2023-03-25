@@ -1,0 +1,27 @@
+<app-dialog-shared [width]="'50vw'" [dialogHeader]='title' (close)="closeDialog()">
+    <div class="bodyDialog">
+            <form [formGroup]="commentsForm" >
+                <div class="grid p-fluid">
+                    <div class="col-12 mb-2 lg:col-9 lg:mb-0">
+                        <app-text-area-field label="اضافة ملاحطة" formControlName="Notes"></app-text-area-field>
+                    </div>
+                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                        <app-select-field label="أولوية الملاحظة" formControlName="Comments" [dropdownItems]="comments" > </app-select-field>
+                    </div>
+                    <div class="col-12 mb-2 lg:mb-0">
+                       <ul>
+                        <li class="background-color-01 p-2">ملاحظة رقم 1 اضافة تنبيه عند الانتهاء (عالية)</li>
+                        <li class="my-2 background-color-02  p-2">ملاحظة رقم 2 اظهار رسالة عن اكتمال المهمة (متوسطة)</li>
+                        <li class=" background-color-03  p-2">ملاحظة رقم 3 تم اضافة مدة المشروع (منخفضة)</li>
+                       </ul>
+                    </div>
+                </div>
+            </form>
+    </div>
+    <div class="footerDialog">
+        <app-button-component label="حفظ"  [pTooltipCustom]="'حفط'"
+            [Icon]="'pi pi-folder-open'"></app-button-component>
+        <app-button-component label="مسح بيانات الحقول" [classColor]="' p-button-secondary'"
+            [pTooltipCustom]="'مسح الحقول '" [Icon]="'pi pi-eraser'"></app-button-component>
+    </div>
+</app-dialog-shared>

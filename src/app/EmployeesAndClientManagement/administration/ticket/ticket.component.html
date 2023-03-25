@@ -1,0 +1,126 @@
+<ng-container>
+    <div class="card">
+        <div
+            class="flex flex-column md:flex-row md:align-items-start md:justify-content-between mb-3"
+        >
+            <div class="text-900 text-xl font-semibold mb-3 md:mb-0">
+                {{ isClient ? "تذاكري" : "  معالجة التذاكر والدعم الفني" }}
+            </div>
+            <div class="inline-flex align-items-center">
+                <span class="p-input-icon-left flex-auto mr-2">
+                    <app-button-component
+                        *ngIf="isClient"
+                        [classColor]="'p-button-outlined'"
+                        [Icon]="'pi pi-plus'"
+                        label="اضافة تذكرة"
+                        [isCustomLable]="true"
+                        (action)="addReplayDialog()"
+                    >
+                    </app-button-component>
+                </span>
+            </div>
+        </div>
+        <hr />
+        <br />
+        <ng-container *ngIf="dataTable">
+            <p-table
+                styleClass="p-datatable-gridlines"
+                [rows]="4"
+                [paginator]="true"
+                [style.width]="'100%'"
+                [value]="dataTable"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="table-header">
+                        <form>
+                            <div class="grid p-fluid">
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <app-input-field label="موضوع التزكرة">
+                                    </app-input-field>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
+                                    <app-input-field label="حالة التزكرة">
+                                    </app-input-field>
+                                </div>
+                                <div style="margin: 39px 23px 0 0">
+                                    <div class="inline-flex align-items-center">
+                                        <app-button-component
+                                            [classColor]="'p-button-help'"
+                                            [Icon]="'pi pi-id-card'"
+                                            label="بحث متقدم"
+                                            [isCustomLable]="true"
+                                            [pTooltipCustom]="'بحث متقدم'"
+                                        >
+                                        </app-button-component>
+                                        <app-button-component
+                                            label="مسح الفلاتر"
+                                            class="pr-2"
+                                            [classColor]="
+                                                ' p-button-secondary '
+                                            "
+                                            [pTooltipCustom]="'مسح الفلاتر '"
+                                            [Icon]="'pi pi-eraser'"
+                                        ></app-button-component>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">موضوع التزكرة</th>
+                        <th class="text-center">رسالة التزكرة</th>
+                        <th class="text-center">التاريخ</th>
+                        <th class="text-center">الحالة</th>
+                        <th class="text-center">الاجراء</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item let-index="rowIndex">
+                    <tr [class]="item?.Status === 'تم الرد'?'task-done':''">
+                        <td>
+                            <span class="reorder-row-icon">{{
+                                index + 1
+                            }}</span>
+                        </td>
+                        <td>{{ item.Subject }}</td>
+                        <td>{{ item.Message }}</td>
+                        <td>{{ item.Date }}</td>
+                        <td>{{ item.Status }}</td>
+
+                        <td class="text-center">
+                            <!-- <app-icon-shared
+                                [Icon]="'pi pi-eye'"
+                                [classColor]="'var(--purple-500)'"
+                                class="icon-details"
+                                (action)="showReplayDialog(item)"
+                                [pTooltipCustom]="'عرض التزكرة'"
+                            ></app-icon-shared> -->
+                            <app-icon-shared
+                                *ngIf="item?.Status !== 'تم الرد'&& !isClient"
+                                [Icon]="'pi pi-eye'"
+                                [classColor]="'var(--blue-400)'"
+                                class="icon-edit"
+                                [pTooltipCustom]="'الرد على التزكرة'"
+                                (action)="showReplayDialog(item)"
+
+                            ></app-icon-shared>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td class="text-center" colspan="6">لا يوجد بيانات</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer"> </ng-template>
+                <ng-template pTemplate="loadingbody"> </ng-template>
+            </p-table>
+        </ng-container>
+    </div>
+</ng-container>
+
+<app-replay-ticket-modal
+    *ngIf="(replayTicket$ | async).isOpen"
+></app-replay-ticket-modal>

@@ -1,0 +1,198 @@
+<ng-container>
+    <div class="card">
+        <div
+            class="flex flex-column md:flex-row md:align-items-start md:justify-content-between mb-3"
+        >
+            <div class="text-900 text-xl font-semibold mb-3 md:mb-0">
+                {{ isClient ? "مشاريعي" : "المشاريع" }}
+            </div>
+            <div class="inline-flex align-items-center">
+                <span class="p-input-icon-left flex-auto mr-2">
+                    <app-button-component
+                        *ngIf="!isClient"
+                        [classColor]="'p-button-outlined'"
+                        [Icon]="'pi pi-plus'"
+                        label="اضافة مشروع"
+                        [isCustomLable]="true"
+                        [pTooltipCustom]="'اضافة مشروع جديد'"
+                        (action)="addFormDataDialog()"
+                    >
+                    </app-button-component>
+                </span>
+            </div>
+        </div>
+        <hr />
+
+        <br />
+        <p-tabMenu [model]="filterView" [activeItem]="activeStatus"></p-tabMenu>
+        <ng-container *ngIf="viewType === 'Table'">
+            <form>
+                <div class="grid p-fluid">
+                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                        <app-search-field placeholder="بحث...">
+                        </app-search-field>
+                    </div>
+                </div>
+            </form>
+            <p-table
+                styleClass="p-datatable-gridlines "
+                [rows]="5"
+                [paginator]="true"
+                [style.width]="'100%'"
+                [value]="dataTable"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="table-header">
+                        <form>
+                            <div class="grid p-fluid">
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <app-input-field label="اسم الشمروع او رقمه ">
+                                    </app-input-field>
+                                </div>
+
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
+                                    <app-input-field label="القسم">
+                                    </app-input-field>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
+                                    <app-input-field label="تاريخ البداية">
+                                    </app-input-field>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
+                                    <app-input-field
+                                        label="التاريخ المتوقع للنهاية"
+                                    >
+                                    </app-input-field>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <app-input-field label="حالة المشروع">
+                                    </app-input-field>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <app-input-field label="الموقع (LAT -LONG)	">
+                                    </app-input-field>
+                                </div>
+                                <div style="margin: 39px 23px 0 0">
+                                    <div class="inline-flex align-items-center">
+                                        <app-button-component
+                                            [classColor]="'p-button-help'"
+                                            [Icon]="'pi pi-id-card'"
+                                            label="بحث متقدم"
+                                            [isCustomLable]="true"
+                                            [pTooltipCustom]="'بحث متقدم'"
+                                        >
+                                        </app-button-component>
+                                        <app-button-component
+                                            label="مسح الفلاتر"
+                                            class="pr-2"
+                                            [classColor]="
+                                                ' p-button-secondary '
+                                            "
+                                            [pTooltipCustom]="'مسح الفلاتر '"
+                                            [Icon]="'pi pi-eraser'"
+                                        ></app-button-component>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">اسم المشروع</th>
+                        <th class="text-center">رقم المشروع</th>
+                        <th class="text-center">الموقع (LAT -LONG)</th>
+                        <th class="text-center">بداية المشروع</th>
+                        <th class="text-center">
+                            الوقت التقريبي لتسليم المشروع
+                        </th>
+                        <th class="text-center">حالة المشروع</th>
+                        <th class="text-center">الاجراءات</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item let-index="rowIndex">
+                    <tr [ngClass]="index === 2 ? 'task-done' : ''">
+                        <td>
+                            <span class="reorder-row-icon">{{
+                                index + 1
+                            }}</span>
+                        </td>
+                        <td>{{ item.ProjectName }}</td>
+                        <td>{{ item.ProjectID }}</td>
+                        <td>
+                            {{ item.LocationWAN }} <br />
+                            {{ item.LocationLAN }}
+                        </td>
+                        <td>{{ item.StartProject | date : "YYYY-MM-dd" }}</td>
+                        <td>{{ item.EndTimeProject | date : "YYYY-MM-dd" }}</td>
+                        <td>{{ item.status }}</td>
+                        <td
+                            class="text-center flex justify-content-center align-items-center"
+                        >
+                            <app-icon-shared
+                                [Icon]="'pi pi-eye'"
+                                [classColor]="'var(--purple-500)'"
+                                [pTooltipCustom]="'عرض تفاصيل المشروع'"
+                                (action)="showFormDataDialog(item)"
+                                class="icon-details"
+                            ></app-icon-shared>
+                            <app-icon-shared
+                                *ngIf="!isClient"
+                                [Icon]="'pi pi-pencil'"
+                                [classColor]="'var(--blue-400)'"
+                                [pTooltipCustom]="'تعديل المشروع'"
+                                (action)="addFormDataDialog(item)"
+                                class="icon-edit"
+                            ></app-icon-shared>
+
+                            <app-icon-shared
+                                *ngIf="!isClient"
+                                [Icon]="'pi pi-trash'"
+                                [classColor]="'var(--red-400)'"
+                                [pTooltipCustom]="'حذف'"
+                                class="icon-delete"
+                            ></app-icon-shared>
+                            <p-inputSwitch
+                                *ngIf="!isClient"
+                                class="mx-2"
+                                pTooltip="تعطيل مؤقت"
+                                tooltipPosition="top"
+                            ></p-inputSwitch>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td class="text-center" colspan="6">لا يوجد بيانات</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer"> </ng-template>
+                <ng-template pTemplate="loadingbody"> </ng-template>
+            </p-table>
+        </ng-container>
+        <ng-container *ngIf="viewType === 'Calender'">
+            <full-calendar
+                [options]="calendarOptions"
+                style="min-height: 600px"
+                class="mt-5"
+            >
+                <ng-template #eventContent let-arg>
+                    <b>{{ arg.timeText }}</b>
+                    <i>{{ arg.event.title }}</i>
+                </ng-template>
+            </full-calendar>
+        </ng-container>
+    </div>
+</ng-container>
+
+<app-add-new-projects
+    *ngIf="(DisplayProjectsDialog$ | async).isOpen"
+></app-add-new-projects>
+<app-tasks-modal *ngIf="(tasksDialog$ | async).isOpen"></app-tasks-modal>
+<app-attached-files
+    *ngIf="(attachedFilesDialog$ | async).isOpen"
+></app-attached-files>
+<app-comments-modal
+    *ngIf="(commentsDialog$ | async).isOpen"
+></app-comments-modal>
